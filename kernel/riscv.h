@@ -345,14 +345,17 @@ sfence_vma()
 #define PTE_U (1L << 4) // 1 -> user can access
 
 // shift a physical address to the right place for a PTE.
+// 10 bit left shift is for flag
 #define PA2PTE(pa) ((((uint64)pa) >> 12) << 10)
 
+// remove flag by 10 right shift and to set 12bit offset lefft shift so.
 #define PTE2PA(pte) (((pte) >> 10) << 12)
 
+// 10bit (0x3ff = 1023)
 #define PTE_FLAGS(pte) ((pte) & 0x3FF)
 
 // extract the three 9-bit page table indices from a virtual address.
-#define PXMASK          0x1FF // 9 bits
+#define PXMASK          0x1FF // 9 bits (0x1ff = 2*16^2 -1 = 511)
 #define PXSHIFT(level)  (PGSHIFT+(9*(level)))
 #define PX(level, va) ((((uint64) (va)) >> PXSHIFT(level)) & PXMASK)
 

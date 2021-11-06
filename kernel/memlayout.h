@@ -45,6 +45,9 @@
 // for use by the kernel and user pages
 // from physical address 0x80000000 to PHYSTOP.
 #define KERNBASE 0x80000000L
+// 128*1024*1024=0x08000000
+// PHYSTOP = 0x88000000L
+// I think PHYSTOP does not correspond to 0x86400000 in textbook.
 #define PHYSTOP (KERNBASE + 128*1024*1024)
 
 // map the trampoline page to the highest address,
@@ -53,6 +56,7 @@
 
 // map kernel stacks beneath the trampoline,
 // each surrounded by invalid guard pages.
+// 2 indecates guard page and kstack
 #define KSTACK(p) (TRAMPOLINE - ((p)+1)* 2*PGSIZE)
 
 // User memory layout.
