@@ -35,6 +35,7 @@ exec(char *path, char **argv)
   if(elf.magic != ELF_MAGIC)
     goto bad;
 
+  // allocates a new page table with no user mappings
   if((pagetable = proc_pagetable(p)) == 0)
     goto bad;
 
@@ -49,6 +50,7 @@ exec(char *path, char **argv)
     if(ph.vaddr + ph.memsz < ph.vaddr)
       goto bad;
     uint64 sz1;
+    // allocates memory for each ELF segment withuvmalloc
     if((sz1 = uvmalloc(pagetable, sz, ph.vaddr + ph.memsz)) == 0)
       goto bad;
     sz = sz1;
@@ -116,6 +118,9 @@ exec(char *path, char **argv)
   p->trapframe->sp = sp; // initial stack pointer
   proc_freepagetable(oldpagetable, oldsz);
 
+  if(p->pid == 1)
+    vmprint(p->pagetable, 0);
+  // printf("pid%d\n",p->pid);
   return argc; // this ends up in a0, the first argument to main(argc, argv)
 
  bad:

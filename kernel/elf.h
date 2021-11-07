@@ -22,6 +22,8 @@ struct elfhdr {
 };
 
 // Program section header
+// Each proghdr describes a section of the application 
+// that must be loaded into memory
 struct proghdr {
   uint32 type;
   uint32 flags;
